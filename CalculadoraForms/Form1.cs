@@ -14,6 +14,8 @@ namespace CalculadoraForms
     {
         int numero1;
         string ultimoOp;
+        bool novaOperacao;
+   
         public Form1()
         {
             InitializeComponent();
@@ -25,29 +27,78 @@ namespace CalculadoraForms
         }
         private void Operador_Click(object sender, EventArgs e)
         {
-            // Obter o botão que está chamando o evento
             var botao = (Button)sender;
-            numero1 = int.Parse(txbTela.Text);
-            txbTela.Clear();
-            txbAux.Text = numero1.ToString() + botao.Text;
-            ultimoOp = botao.Text;
+
+            if (novaOperacao == false && txbTela.Text != "" && txbAux.Text == "")
+            {
+
+               
+
+                numero1 = int.Parse(txbTela.Text);
+                txbTela.Clear();
+                txbAux.Text = numero1.ToString() + botao.Text;
+                ultimoOp = botao.Text;
+            }
+            else if (txbAux.Text != "")
+            {
+                btnIgual.PerformClick();
+                txbAux.Text = txbTela.Text + botao.Text;
+                numero1 = int.Parse(txbTela.Text);
+                txbTela.Text = "";
+                ultimoOp = botao.Text;
+            }
+
 
         }
         private void Numero_Click(object sender, EventArgs e)
         {
-            // Obter o botão que está chamando o evento
+            
             var botao = (Button)sender;
             txbTela.Text += botao.Text;
         }
 
         private void btnIgual_Click(object sender, EventArgs e)
         {
-            switch (ultimoOp)
+            if (txbTela.Text != "")
             {
-                case "+":
-                    txbAux.Clear();
-                    txbTela.Text = (numero1 + int.Parse(txbTela.Text)).ToString();
-                    break;
+                switch(ultimoOp)
+                {
+                    case "+":
+                        txbAux.Clear();
+                        txbTela.Text = (numero1 + int.Parse(txbTela.Text)).ToString();
+                        break;
+
+                    case "-":
+                        txbAux.Clear();
+                        txbTela.Text = (numero1 - int.Parse(txbTela.Text)).ToString();
+                        break;
+
+                    case "x":
+                        txbAux.Clear();
+                        txbTela.Text = (numero1 * int.Parse(txbTela.Text)).ToString();
+                        break;
+
+
+                    case "÷":
+                        if(int.Parse(txbTela.Text) != 0)
+                        {
+                            txbAux.Clear();
+                            txbTela.Text = (numero1 / int.Parse(txbTela.Text)).ToString();
+                            
+                        }
+                        else
+                        {
+                            MessageBox.Show("Não é possivel divir por 0");
+
+                            
+                        }
+                        break;
+                }
+
+            }
+            else
+            {
+                MessageBox.Show ("Dados Inválidos");
             }
         }
     }
